@@ -64,7 +64,10 @@ const App: React.FC = () => {
       userEmail: email,
       isDev: email?.toLowerCase() === ADMIN_EMAIL,
       activeExpeditions: [],
-      furniture: []
+      furniture: [],
+      achievements: [],
+      bookRules: [],
+      leaderboards: {}
     };
   };
 

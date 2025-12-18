@@ -151,6 +151,9 @@ export interface UserState {
   isDev: boolean;
   activeExpeditions: Expedition[];
   furniture: string[]; 
+  achievements: string[];
+  bookRules: string[];
+  leaderboards: Record<string, { score: number, date: number }[]>;
 }
 
 export interface TechNode {
@@ -177,4 +180,28 @@ export interface CraftingRecipe {
   cost: number;
   icon: string;
   type: 'stun' | 'damage' | 'heal' | 'debuff';
+}
+
+export interface StoryNode {
+  id: string;
+  text: string;
+  choices: { text: string; nextId: string }[];
+  isEnd?: boolean;
+}
+
+export interface Achievement {
+  id: string;
+  name: string;
+  description: string;
+  icon: string;
+  reward: { coins?: number; gems?: number; title?: string };
+  condition: (user: UserState) => boolean;
+}
+
+export interface BookRule {
+  id: string;
+  name: string;
+  description: string;
+  cost: number;
+  effect: string;
 }

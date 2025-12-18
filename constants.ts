@@ -1,4 +1,3 @@
-
 import { Rarity, ElementType, CardTag, Card, Banner, Synergy, TechNode, XPItem, CraftingRecipe, Equipment } from './types';
 
 export const INITIAL_GEMS = 5000;
@@ -247,6 +246,76 @@ export const PRESET_CARDS: Card[] = [
   createCard('c_ssr_dazai_fem', 'Osamu Dazai (Female)', 'Femme Fatale Executive', Rarity.SSR, ElementType.LOGIC, [CardTag.AU_GENDER], 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=400&h=600&auto=format&fit=crop'),
   createCard('c_ssr_chuuya_fem', 'Chūya Nakahara (Female)', 'Mafia Petite Queen', Rarity.SSR, ElementType.EMOTION, [CardTag.AU_GENDER], 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=400&h=600&auto=format&fit=crop'),
   createCard('c_sr_akutagawa_fem', 'Akutagawa Ryūnosuke (Female)', 'Silent Shadow Blade', Rarity.SR, ElementType.DARK, [CardTag.AU_GENDER], 'https://images.unsplash.com/photo-1506197603486-7c8b2c7dc55e?q=80&w=400&h=600&auto=format&fit=crop'),
+
+  // --- PORT MAFIA ---
+  createCard('c_ur_chuuya', 'Chūya Nakahara', 'Upon the Tainted Sorrow', Rarity.UR, ElementType.STRENGTH, [CardTag.PORT_MAFIA], 'https://images.unsplash.com/photo-1558981403-c5f9899a28bc?q=80&w=400&h=600&auto=format&fit=crop'),
+  createCard('c_ssr_akutagawa', 'Akutagawa Ryūnosuke', 'Rashomon', Rarity.SSR, ElementType.DARK, [CardTag.PORT_MAFIA], 'https://images.unsplash.com/photo-1509248961158-e54f6934749c?q=80&w=400&h=600&auto=format&fit=crop'),
+  createCard('c_ssr_kouyou', 'Kouyou Ozaki', 'Golden Demon', Rarity.SSR, ElementType.EMOTION, [CardTag.PORT_MAFIA], 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=400&h=600&auto=format&fit=crop'),
+  createCard('c_sr_gin', 'Gin Akutagawa', 'Silent Blade', Rarity.SR, ElementType.DARK, [CardTag.PORT_MAFIA], 'https://images.unsplash.com/photo-1506197603486-7c8b2c7dc55e?q=80&w=400&h=600&auto=format&fit=crop'),
+  createCard('c_sr_higuchi', 'Ichiyo Higuchi', 'Devoted Subordinate', Rarity.SR, ElementType.EMOTION, [CardTag.PORT_MAFIA], 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=400&h=600&auto=format&fit=crop'),
+  createCard('c_ur_mori', 'Ogai Mori', 'Vita Sexualis', Rarity.UR, ElementType.LOGIC, [CardTag.PORT_MAFIA], 'https://images.unsplash.com/photo-1534030347209-467a5b0ad3e6?q=80&w=400&h=600&auto=format&fit=crop'),
+  createCard('c_ssr_elise', 'Elise', 'Vita Sexualis Manifestation', Rarity.SSR, ElementType.LIGHT, [CardTag.PORT_MAFIA], 'https://images.unsplash.com/photo-1529626458564-28a62394f836?q=80&w=400&h=600&auto=format&fit=crop'),
+  createCard('c_sr_kajii', 'Motojiro Kajii', 'Lemon Bomber', Rarity.SR, ElementType.STRENGTH, [CardTag.PORT_MAFIA], 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=400&h=600&auto=format&fit=crop'),
+
+  // --- GUILD ---
+  createCard('c_ur_fitzgerald', 'Francis Scott Fitzgerald', 'The Great Fitzgerald', Rarity.UR, ElementType.LOGIC, [CardTag.GUILD], 'https://images.unsplash.com/photo-1521119989659-a83eee488004?q=80&w=400&h=600&auto=format&fit=crop'),
+  createCard('c_ssr_poe', 'Edgar Allan Poe', 'Black Cat in the Rue Morgue', Rarity.SSR, ElementType.DARK, [CardTag.GUILD], 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&w=400&h=600&auto=format&fit=crop'),
+  createCard('c_ssr_lovecraft', 'Howard Phillips Lovecraft', 'The Great Old Ones', Rarity.SSR, ElementType.DARK, [CardTag.GUILD], 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=400&h=600&auto=format&fit=crop'),
+  createCard('c_sr_steinbeck', 'John Steinbeck', 'The Grapes of Wrath', Rarity.SR, ElementType.STRENGTH, [CardTag.GUILD], 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=400&h=600&auto=format&fit=crop'),
+  createCard('c_sr_twain', 'Mark Twain', 'Huckleberry Finn and Tom Sawyer', Rarity.SR, ElementType.LOGIC, [CardTag.GUILD], 'https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=400&h=600&auto=format&fit=crop'),
+  createCard('c_sr_alcott', 'Louisa May Alcott', 'Little Women', Rarity.SR, ElementType.EMOTION, [CardTag.GUILD], 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=400&h=600&auto=format&fit=crop'),
+
+  // --- HUNTING DOGS ---
+  createCard('c_ur_fukuchi', 'Ouchi Fukuchi', 'Mirror Lion', Rarity.UR, ElementType.STRENGTH, [CardTag.HUNTING_DOGS], 'https://images.unsplash.com/photo-1521119989659-a83eee488004?q=80&w=400&h=600&auto=format&fit=crop'),
+  createCard('c_ssr_jouno', 'Saigiku Jouno', 'Priceless Tears', Rarity.SSR, ElementType.LOGIC, [CardTag.HUNTING_DOGS], 'https://images.unsplash.com/photo-1453728013993-6d66e9c9123a?q=80&w=400&h=600&auto=format&fit=crop'),
+  createCard('c_ssr_tecchou', 'Tecchou Suehiro', 'Plum Blossoms in Snow', Rarity.SSR, ElementType.STRENGTH, [CardTag.HUNTING_DOGS], 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=400&h=600&auto=format&fit=crop'),
+  createCard('c_sr_teruko', 'Teruko Okura', 'Gasp of the Soul', Rarity.SR, ElementType.EMOTION, [CardTag.HUNTING_DOGS], 'https://images.unsplash.com/photo-1529626458564-28a62394f836?q=80&w=400&h=600&auto=format&fit=crop'),
+  createCard('c_sr_tachihara', 'Michizo Tachihara', 'Midwinter Memento', Rarity.SR, ElementType.STRENGTH, [CardTag.HUNTING_DOGS], 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=400&h=600&auto=format&fit=crop'),
+
+  // --- DECAY OF ANGELS ---
+  createCard('c_ur_fyodor', 'Fyodor Dostoevsky', 'Crime and Punishment', Rarity.UR, ElementType.LOGIC, [CardTag.DOA], 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&w=400&h=600&auto=format&fit=crop'),
+  createCard('c_ur_nikolai', 'Nikolai Gogol', 'The Overcoat', Rarity.UR, ElementType.EMOTION, [CardTag.DOA], 'https://images.unsplash.com/photo-1521119989659-a83eee488004?q=80&w=400&h=600&auto=format&fit=crop'),
+  createCard('c_ssr_sigma', 'Sigma', 'Unknown', Rarity.SSR, ElementType.LOGIC, [CardTag.DOA], 'https://images.unsplash.com/photo-1534030347209-467a5b0ad3e6?q=80&w=400&h=600&auto=format&fit=crop'),
+  createCard('c_ssr_bram', 'Bram Stoker', 'Dracula', Rarity.SSR, ElementType.DARK, [CardTag.DOA], 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&w=400&h=600&auto=format&fit=crop'),
+  createCard('c_sr_ivan', 'Ivan Goncharov', 'The Precipice', Rarity.SR, ElementType.STRENGTH, [CardTag.DOA], 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=400&h=600&auto=format&fit=crop'),
+
+  // --- MORE ADA MEMBERS ---
+  createCard('c_ssr_yosano', 'Akiko Yosano', 'Thou Shalt Not Die', Rarity.SSR, ElementType.EMOTION, [CardTag.ADA], 'https://images.unsplash.com/photo-1551269901-5c5e14c25df7?q=80&w=400&h=600&auto=format&fit=crop'),
+  createCard('c_sr_naomi', 'Naomi Tanizaki', 'Light Snow (Support)', Rarity.SR, ElementType.LIGHT, [CardTag.ADA], 'https://images.unsplash.com/photo-1529626458564-28a62394f836?q=80&w=400&h=600&auto=format&fit=crop'),
+  createCard('c_sr_katai', 'Katai Tayama', 'Futon', Rarity.SR, ElementType.LOGIC, [CardTag.ADA], 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=400&h=600&auto=format&fit=crop'),
+  createCard('c_ur_fukuzawa', 'Yukichi Fukuzawa', 'All Men Are Equal', Rarity.UR, ElementType.LIGHT, [CardTag.ADA], 'https://images.unsplash.com/photo-1521119989659-a83eee488004?q=80&w=400&h=600&auto=format&fit=crop'),
+
+  // --- MORE PORT MAFIA ---
+  createCard('c_ssr_kyouka', 'Kyouka Izumi', 'Demon Snow', Rarity.SSR, ElementType.DARK, [CardTag.PORT_MAFIA], 'https://images.unsplash.com/photo-1529626458564-28a62394f836?q=80&w=400&h=600&auto=format&fit=crop'),
+  createCard('c_sr_hirotsu', 'Ryuurou Hirotsu', 'Falling Camellia', Rarity.SR, ElementType.STRENGTH, [CardTag.PORT_MAFIA], 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=400&h=600&auto=format&fit=crop'),
+  createCard('c_r_black_lizard', 'Black Lizard Squad', 'Tactical Unit', Rarity.R, ElementType.STRENGTH, [CardTag.PORT_MAFIA], 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=400&h=600&auto=format&fit=crop'),
+
+  // --- SPECIAL GOVERNMENT ---
+  createCard('c_ssr_ango', 'Ango Sakaguchi', 'Discourse on Decadence', Rarity.SSR, ElementType.LOGIC, [CardTag.ADA], 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=400&h=600&auto=format&fit=crop'),
+  createCard('c_sr_taneda', 'Santoka Taneda', 'Government Official', Rarity.SR, ElementType.LOGIC, [CardTag.ADA], 'https://images.unsplash.com/photo-1534030347209-467a5b0ad3e6?q=80&w=400&h=600&auto=format&fit=crop'),
+
+  // --- RATS IN THE HOUSE OF THE DEAD ---
+  createCard('c_sr_pushkin', 'Alexander Pushkin', 'The Queen of Spades', Rarity.SR, ElementType.LOGIC, [CardTag.DOA], 'https://images.unsplash.com/photo-1453728013993-6d66e9c9123a?q=80&w=400&h=600&auto=format&fit=crop'),
+  createCard('c_r_mushitaro', 'Mushitaro Oguri', 'The Perfect Crime', Rarity.R, ElementType.DARK, [CardTag.DOA], 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&w=400&h=600&auto=format&fit=crop'),
+
+  // --- ADDITIONAL AU VARIANTS ---
+  createCard('c_ssr_ranpo_detective', 'Ranpo Edogawa', 'Master Detective (Classic)', Rarity.SSR, ElementType.LOGIC, [CardTag.ADA, CardTag.ARC_GUILD], 'https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=400&h=600&auto=format&fit=crop'),
+  createCard('c_ur_dazai_dark_era', 'Osamu Dazai', 'Port Mafia Executive (Dark Era)', Rarity.UR, ElementType.DARK, [CardTag.PORT_MAFIA, CardTag.ARC_DARK_ERA], 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=400&h=600&auto=format&fit=crop'),
+  createCard('c_ssr_chuuya_corruption', 'Chūya Nakahara', 'Corruption Unleashed', Rarity.SSR, ElementType.STRENGTH, [CardTag.PORT_MAFIA, CardTag.ARC_DEAD_APPLE], 'https://images.unsplash.com/photo-1558981403-c5f9899a28bc?q=80&w=400&h=600&auto=format&fit=crop'),
+
+  // --- HOLIDAY/SEASONAL VARIANTS ---
+  createCard('c_ssr_dazai_christmas', 'Osamu Dazai', 'Holiday Detective', Rarity.SSR, ElementType.LIGHT, [CardTag.ADA], 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=400&h=600&auto=format&fit=crop'),
+  createCard('c_sr_atsushi_summer', 'Atsushi Nakajima', 'Beach Tiger', Rarity.SR, ElementType.LIGHT, [CardTag.ADA], 'https://images.unsplash.com/photo-1541562232579-512a21360020?q=80&w=400&h=600&auto=format&fit=crop'),
+  createCard('c_sr_chuuya_halloween', 'Chūya Nakahara', 'Vampire Lord', Rarity.SR, ElementType.DARK, [CardTag.PORT_MAFIA], 'https://images.unsplash.com/photo-1558981403-c5f9899a28bc?q=80&w=400&h=600&auto=format&fit=crop'),
+
+  // --- CHIBI/CUTE VARIANTS ---
+  createCard('c_r_chibi_dazai', 'Chibi Dazai', 'Tiny Bandaged Detective', Rarity.R, ElementType.EMOTION, [CardTag.ADA], 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=400&h=600&auto=format&fit=crop'),
+  createCard('c_r_chibi_chuuya', 'Chibi Chuuya', 'Pocket-Sized Gravity Master', Rarity.R, ElementType.EMOTION, [CardTag.PORT_MAFIA], 'https://images.unsplash.com/photo-1558981403-c5f9899a28bc?q=80&w=400&h=600&auto=format&fit=crop'),
+  createCard('c_r_chibi_atsushi', 'Chibi Atsushi', 'Baby Tiger', Rarity.R, ElementType.EMOTION, [CardTag.ADA], 'https://images.unsplash.com/photo-1541562232579-512a21360020?q=80&w=400&h=600&auto=format&fit=crop'),
+
+  // --- ADDITIONAL RARE VARIANTS ---
+  createCard('c_ur_soukoku', 'Double Black', 'Legendary Partnership', Rarity.UR, ElementType.DARK, [CardTag.ADA, CardTag.PORT_MAFIA], 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=400&h=600&auto=format&fit=crop'),
+  createCard('c_ssr_shin_soukoku', 'New Double Black', 'Next Generation', Rarity.SSR, ElementType.LIGHT, [CardTag.ADA, CardTag.PORT_MAFIA], 'https://images.unsplash.com/photo-1541562232579-512a21360020?q=80&w=400&h=600&auto=format&fit=crop'),
 ];
 
 export const BANNERS: Banner[] = [
@@ -254,5 +323,7 @@ export const BANNERS: Banner[] = [
   { id: 'b_equipment', name: 'Tactical Gear Manifestation', image: 'https://images.unsplash.com/photo-1517842645767-c639042777db?q=80&w=800&h=400&auto=format&fit=crop', type: 'equipment', cost: 80 },
   { id: 'b_au_cross', name: 'Multiverse Crossover: MHA & PJO', image: 'https://images.unsplash.com/photo-1533107862482-0e6974b06ec4?q=80&w=800&h=400&auto=format&fit=crop', type: 'au', cost: 100 },
   { id: 'b_au', name: 'Alternative Realities Scout', image: 'https://images.unsplash.com/photo-1532012197267-da84d127e765?q=80&w=800&h=400&auto=format&fit=crop', type: 'au', cost: 100 },
-  { id: 'b_limited', name: 'Divine Myths & Magic', image: 'https://images.unsplash.com/photo-1506197603486-7c8b2c7dc55e?q=80&w=800&h=400&auto=format&fit=crop', type: 'limited', cost: 120 }
+  { id: 'b_limited', name: 'Divine Myths & Magic', image: 'https://images.unsplash.com/photo-1506197603486-7c8b2c7dc55e?q=80&w=800&h=400&auto=format&fit=crop', type: 'limited', cost: 120 },
+  { id: 'b_holiday', name: 'Seasonal Festivities', image: 'https://images.unsplash.com/photo-1512389142860-9c449e58a543?q=80&w=800&h=400&auto=format&fit=crop', type: 'limited', cost: 150, endTime: Date.now() + (7 * 24 * 60 * 60 * 1000) },
+  { id: 'b_soukoku', name: 'Double Black Legacy', image: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&w=800&h=400&auto=format&fit=crop', type: 'limited', cost: 200, endTime: Date.now() + (3 * 24 * 60 * 60 * 1000) }
 ];

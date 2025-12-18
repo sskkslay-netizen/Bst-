@@ -1,0 +1,239 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bungou Study Tales</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Bebas+Neue&display=swap');
+    
+    body {
+      font-family: 'Inter', sans-serif;
+      overflow-x: hidden;
+      background-color: #f0f9ff;
+    }
+
+    .font-bebas {
+      font-family: 'Bebas Neue', sans-serif;
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #e0f2fe;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #7dd3fc;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #38bdf8;
+    }
+
+    .parallax-card {
+      transition: transform 0.1s ease-out;
+      transform-style: preserve-3d;
+    }
+
+    /* Rarity Glows */
+    @keyframes glow-ssr {
+      0% { box-shadow: 0 0 5px #fbbf24; }
+      50% { box-shadow: 0 0 20px #fbbf24; }
+      100% { box-shadow: 0 0 5px #fbbf24; }
+    }
+
+    @keyframes glow-ur {
+      0% { box-shadow: 0 0 10px #ec4899; filter: hue-rotate(0deg); }
+      50% { box-shadow: 0 0 30px #8b5cf6; filter: hue-rotate(180deg); }
+      100% { box-shadow: 0 0 10px #ec4899; filter: hue-rotate(360deg); }
+    }
+
+    @keyframes holographic {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    @keyframes floating-card {
+      0% { transform: translateY(0px); }
+      50% { transform: translateY(-15px); }
+      100% { transform: translateY(0px); }
+    }
+
+    .rarity-ssr { animation: glow-ssr 2s infinite; }
+    .rarity-ur { animation: glow-ur 3s infinite; }
+    .animate-float { animation: floating-card 3s ease-in-out infinite; }
+
+    /* Rarity Badge Animations */
+    @keyframes rarity-pop {
+      0% { transform: scale(0.5); opacity: 0; }
+      70% { transform: scale(1.2); opacity: 1; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    @keyframes rarity-shimmer {
+      0% { background-position: -200% 0; }
+      100% { background-position: 200% 0; }
+    }
+
+    .animate-rarity-pop {
+      animation: rarity-pop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    }
+
+    .shimmer-overlay {
+      background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.6) 50%, rgba(255,255,255,0) 100%);
+      background-size: 200% 100%;
+      animation: rarity-shimmer 2s infinite linear;
+      pointer-events: none;
+    }
+
+    .badge-ssr-glow {
+      box-shadow: 0 0 15px #fbbf24;
+      border: 1px solid #fbbf24;
+    }
+
+    .badge-ur-glow {
+      box-shadow: 0 0 20px #ec4899;
+      border: 1px solid #ec4899;
+      animation: glow-ur 3s infinite alternate;
+    }
+
+    .max-lb-glow {
+      position: relative;
+    }
+    .max-lb-glow::after {
+      content: '';
+      position: absolute;
+      inset: -2px;
+      border-radius: 0.75rem;
+      background: linear-gradient(45deg, #ff0000, #ff7300, #fffb00, #48ff00, #00ffd5, #002bff, #7a00ff, #ff00c8, #ff0000);
+      background-size: 400%;
+      z-index: -1;
+      animation: holographic 20s linear infinite;
+      opacity: 0.5;
+      filter: blur(5px);
+    }
+
+    .shadow-glow {
+      box-shadow: 0 0 15px currentColor;
+    }
+
+    /* --- THEME EFFECTS --- */
+
+    /* Rain (Dark Era) */
+    @keyframes rain-fall {
+      from { transform: translateY(-100vh); }
+      to { transform: translateY(100vh); }
+    }
+    .rain-drop {
+      position: absolute;
+      background: linear-gradient(to bottom, rgba(255,255,255,0) 0%, rgba(255,255,255,0.4) 100%);
+      width: 1px;
+      height: 80px;
+      pointer-events: none;
+      animation: rain-fall linear infinite;
+    }
+
+    /* Fog (Dead Apple) */
+    @keyframes fog-drift {
+      0% { transform: translateX(-10%) translateY(0); opacity: 0.3; }
+      50% { transform: translateX(10%) translateY(5%); opacity: 0.6; }
+      100% { transform: translateX(-10%) translateY(0); opacity: 0.3; }
+    }
+    .fog-cloud {
+      position: absolute;
+      background: radial-gradient(circle, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0) 70%);
+      filter: blur(40px);
+      border-radius: 50%;
+      pointer-events: none;
+      animation: fog-drift 20s ease-in-out infinite;
+    }
+
+    /* Sparkles (Casino) */
+    @keyframes sparkle-float {
+      0% { transform: translateY(0) rotate(0deg); opacity: 0; }
+      50% { opacity: 1; }
+      100% { transform: translateY(-100px) rotate(360deg); opacity: 0; }
+    }
+    .sparkle {
+      position: absolute;
+      background: #fbbf24;
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      box-shadow: 0 0 10px #fbbf24;
+      pointer-events: none;
+      animation: sparkle-float linear infinite;
+    }
+
+    /* Double Black / Soukoku Animations */
+    @keyframes soukoku-bg {
+      0% { background-color: rgba(0,0,0,0); }
+      20% { background-color: rgba(0,0,0,0.8); }
+      80% { background-color: rgba(0,0,0,0.8); }
+      100% { background-color: rgba(0,0,0,0); }
+    }
+
+    @keyframes soukoku-flash {
+      0% { transform: scale(0.8); opacity: 0; filter: brightness(3); }
+      50% { transform: scale(1.1); opacity: 1; filter: brightness(1); }
+      100% { transform: scale(1); opacity: 0; filter: brightness(3); }
+    }
+
+    @keyframes screen-shake {
+      0% { transform: translate(0, 0); }
+      10% { transform: translate(-5px, -5px); }
+      20% { transform: translate(5px, 5px); }
+      30% { transform: translate(-5px, 5px); }
+      40% { transform: translate(5px, -5px); }
+      50% { transform: translate(-5px, -5px); }
+      60% { transform: translate(5px, 5px); }
+      70% { transform: translate(-5px, 5px); }
+      80% { transform: translate(5px, -5px); }
+      90% { transform: translate(-5px, -5px); }
+      100% { transform: translate(0, 0); }
+    }
+
+    .animate-soukoku-overlay {
+      animation: soukoku-bg 3s forwards;
+    }
+
+    .animate-soukoku-flash {
+      animation: soukoku-flash 1s infinite;
+    }
+
+    .animate-shake {
+      animation: screen-shake 0.3s infinite;
+    }
+
+    @keyframes gravity-distort {
+      0% { border-radius: 50%; transform: scale(1); }
+      50% { border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%; transform: scale(1.2) rotate(5deg); }
+      100% { border-radius: 50%; transform: scale(1); }
+    }
+
+    .gravity-void {
+      animation: gravity-distort 2s infinite ease-in-out;
+      background: radial-gradient(circle, #7c3aed 0%, #000 100%);
+      box-shadow: 0 0 50px #7c3aed;
+    }
+  </style>
+<script type="importmap">
+{
+  "imports": {
+    "@google/genai": "https://esm.sh/@google/genai@^1.34.0",
+    "react": "https://esm.sh/react@^19.2.3",
+    "react/": "https://esm.sh/react@^19.2.3/",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.3/"
+  }
+}
+</script>
+</head>
+<body>
+  <div id="root"></div>
+</body>
+</html>

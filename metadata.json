@@ -1,0 +1,8 @@
+{
+  "name": "Bungou Study Tales",
+  "description": "An AI-powered study companion with a Bungou Stray Dogs inspired gacha system. Earn coins by studying, pull for rare AU cards, and battle enemies using your knowledge.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ]
+}

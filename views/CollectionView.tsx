@@ -72,6 +72,10 @@ const CollectionView: React.FC<CollectionViewProps> = ({ user, setUser, onLevelU
   const selectedCard = selectedInstanceId ? user.cardInstances[selectedInstanceId] : null;
   const equippedItem = selectedCard?.equippedEquipmentId ? user.equipmentInstances[selectedCard.equippedEquipmentId] : null;
 
+  const getElementAdvantage = (attacker: ElementType, defender: ElementType) => {
+    return ELEMENT_TRIANGLE[attacker] === defender;
+  };
+
   return (
     <div className="flex flex-col lg:flex-row h-full gap-8">
       <div className="flex-1 flex flex-col space-y-6">
@@ -92,6 +96,46 @@ const CollectionView: React.FC<CollectionViewProps> = ({ user, setUser, onLevelU
             </div>
           )}
         </div>
+
+        {/* Element Triangle Display */}
+        {activeTab === 'team' && (
+          <div className="bg-white/90 backdrop-blur-sm rounded-[2rem] p-6 border border-blue-100 shadow-lg">
+            <h3 className="font-bebas text-xl text-blue-900 mb-4">Elemental Advantage System</h3>
+            <div className="flex justify-center items-center space-x-8">
+              <div className="text-center">
+                <div className="w-16 h-16 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold mb-2 element-advantage">LOGIC</div>
+                <span className="text-xs text-blue-600">→ Emotion</span>
+              </div>
+              <div className="text-center">
+                <div className="w-16 h-16 bg-rose-500 rounded-full flex items-center justify-center text-white font-bold mb-2 element-advantage">EMOTION</div>
+                <span className="text-xs text-rose-600">→ Strength</span>
+              </div>
+              <div className="text-center">
+                <div className="w-16 h-16 bg-emerald-500 rounded-full flex items-center justify-center text-white font-bold mb-2 element-advantage">STRENGTH</div>
+                <span className="text-xs text-emerald-600">→ Logic</span>
+              </div>
+            </div>
+            <p className="text-center text-xs text-slate-500 mt-4 italic">Strategic deployment based on elemental weaknesses grants combat advantages</p>
+          </div>
+        )}
+
+        {/* Team Synergy Display */}
+        {activeTab === 'team' && activeSynergies.length > 0 && (
+          <div className="bg-gradient-to-r from-amber-50 to-orange-50 rounded-[2rem] p-6 border border-amber-200 shadow-lg">
+            <h3 className="font-bebas text-xl text-amber-900 mb-4">Active Synergies</h3>
+            <div className="space-y-3">
+              {activeSynergies.map(syn => (
+                <div key={syn.id} className="flex items-center justify-between bg-white/60 p-4 rounded-xl border border-amber-100">
+                  <div>
+                    <p className="font-bold text-amber-900">{syn.name}</p>
+                    <p className="text-xs text-amber-700">{syn.effectDescription}</p>
+                  </div>
+                  <div className="text-2xl animate-pulse">⚡</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
 
         {activeTab === 'equipment' ? (
           <div className="flex-1 overflow-y-auto grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-6 pr-2 custom-scrollbar">
@@ -135,6 +179,14 @@ const CollectionView: React.FC<CollectionViewProps> = ({ user, setUser, onLevelU
                  {data.equippedEquipmentId && (
                    <div className="absolute top-4 left-4 bg-indigo-600 text-white text-[8px] font-black px-2 py-1 rounded-lg shadow-lg z-20 animate-pulse">GEARED</div>
                  )}
+                 {data.isFavorite && (
+                   <div className="absolute top-4 right-4 text-yellow-400 text-xl drop-shadow-lg z-20 animate-pulse">★</div>
+                 )}
+                 {activeTab === 'team' && currentTeamIds.includes(instId) && (
+                   <div className="absolute bottom-4 right-4 bg-blue-600 text-white text-[8px] font-black px-2 py-1 rounded-lg shadow-lg z-20">
+                     TEAM {currentTeamIds.indexOf(instId) + 1}
+                   </div>
+                 )}
               </div>
             ))}
           </div>
@@ -149,7 +201,34 @@ const CollectionView: React.FC<CollectionViewProps> = ({ user, setUser, onLevelU
                   <h3 className="text-2xl font-bold text-blue-900">{selectedCard.name}</h3>
                   <p className="text-[10px] text-blue-400 font-black uppercase tracking-widest">{selectedCard.title}</p>
                 </div>
-                <span className="bg-blue-600 text-white px-3 py-1 rounded-full text-[10px] font-black">LV. {selectedCard.level}</span>
+                <div className="flex items-center gap-2">
+                  <button 
+                    onClick={() => setUser(prev => ({
+                      ...prev,
+                      cardInstances: {
+                        ...prev.cardInstances,
+                        [selectedInstanceId!]: { ...selectedCard, isFavorite: !selectedCard.isFavorite }
+                      }
+                    }))}
+                    className={`text-xl transition-all ${selectedCard.isFavorite ? 'text-yellow-400' : 'text-slate-300 hover:text-yellow-400'}`}
+                  >
+                    ★
+                  </button>
+                  <span className="bg-blue-600 text-white px-3 py-1 rounded-full text-[10px] font-black">LV. {selectedCard.level}</span>
+                </div>
+              </div>
+
+              {/* Skill Display */}
+              <div className="p-6 bg-slate-50 rounded-[2rem] border border-slate-100">
+                <p className="text-[8px] font-black uppercase text-slate-400 tracking-widest mb-2">Ability</p>
+                <h4 className="font-bold text-slate-800 mb-2">{selectedCard.skill.name}</h4>
+                <p className="text-xs text-slate-600 mb-3">{selectedCard.skill.description}</p>
+                <div className="flex gap-2">
+                  <span className="px-2 py-1 bg-blue-100 text-blue-700 text-[8px] font-black rounded uppercase">{selectedCard.skill.type}</span>
+                  <span className="px-2 py-1 bg-green-100 text-green-700 text-[8px] font-black rounded">
+                    {selectedCard.skill.type === 'buff' ? `${selectedCard.skill.value}x` : `${selectedCard.skill.value} DMG`}
+                  </span>
+                </div>
               </div>
 
               <div className="p-6 bg-indigo-50 rounded-[2rem] border border-indigo-100 relative group overflow-hidden">

@@ -82,6 +82,19 @@ const HomeView: React.FC<HomeViewProps> = ({ user, setUser, onUpdateCoins, onUpd
     return `${m}:${s < 10 ? '0' : ''}${s}`;
   };
 
+  const getPetState = () => {
+    if (isActive) return 'studying';
+    if (timeLeft < 25 * 60) return 'resting';
+    return 'idle';
+  };
+
+  const getPetAnimation = () => {
+    const state = getPetState();
+    if (state === 'studying') return 'animate-pet-study';
+    if (state === 'resting') return 'animate-pet-sleep';
+    return '';
+  };
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto pb-8">
       {/* Timer Section */}
@@ -160,14 +173,21 @@ const HomeView: React.FC<HomeViewProps> = ({ user, setUser, onUpdateCoins, onUpd
            <div className="flex-1 flex items-center justify-center py-4 relative group">
             {leader ? (
               <div className="relative">
-                <img src={leader.image} className={`w-48 h-48 rounded-full object-cover border-8 border-blue-100 shadow-2xl transition-all ${isActive ? 'animate-bounce' : ''}`} alt="Lead" />
+                <img src={leader.image} className={`w-48 h-48 rounded-full object-cover border-8 border-blue-100 shadow-2xl transition-all ${getPetAnimation()}`} alt="Lead" />
                 {isActive && <div className="absolute -top-4 -right-4 bg-white p-2 rounded-2xl border border-blue-100 shadow-xl animate-bounce"><span className="text-2xl">📝</span></div>}
+                {getPetState() === 'resting' && <div className="absolute -top-4 -left-4 bg-white p-2 rounded-2xl border border-blue-100 shadow-xl animate-pulse"><span className="text-2xl">😴</span></div>}
+                {getPetState() === 'idle' && <div className="absolute -bottom-4 -right-4 bg-white p-2 rounded-2xl border border-blue-100 shadow-xl"><span className="text-2xl">💭</span></div>}
               </div>
             ) : <p className="text-slate-400 font-bold uppercase tracking-widest text-xs">No File Selected</p>}
            </div>
            <div className="text-center mt-4">
               <p className="text-sm font-bold text-blue-900">{leader ? leader.name : 'Awaiting Assignment'}</p>
               <p className="text-[8px] font-bold text-blue-400 uppercase tracking-widest">Team {user.currentTeamIndex + 1} Leader</p>
+              <p className="text-[8px] text-slate-400 italic mt-1">
+                {getPetState() === 'studying' && 'Focused and ready!'}
+                {getPetState() === 'resting' && 'Taking a well-deserved break...'}
+                {getPetState() === 'idle' && 'Waiting for your next study session.'}
+              </p>
            </div>
         </div>
 

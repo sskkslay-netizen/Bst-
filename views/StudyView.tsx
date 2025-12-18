@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { UserState, StudySet, Card, Rarity, Equipment } from '../types';
 import { generateStudyQuestions, generateMatchingGame, extractStudyMaterialFromImage } from '../services/geminiService';
@@ -13,7 +12,7 @@ interface StudyViewProps {
 }
 
 const StudyView: React.FC<StudyViewProps> = ({ user, setUser, onUpdateCoins, onUpdateGems, updateStudyPoints }) => {
-  const [activeGame, setActiveGame] = useState<'none' | 'dungeon' | 'matching'>('none');
+  const [activeGame, setActiveGame] = useState<'none' | 'dungeon' | 'matching' | 'flashcard' | 'memory' | 'gravity' | 'boss' | 'story'>('none');
   const [questions, setQuestions] = useState<any[]>([]);
   const [matchingPairs, setMatchingPairs] = useState<any[]>([]);
   const [shuffledTerms, setShuffledTerms] = useState<any[]>([]);
@@ -44,6 +43,28 @@ const StudyView: React.FC<StudyViewProps> = ({ user, setUser, onUpdateCoins, onU
   const [matchedIndices, setMatchedIndices] = useState<number[]>([]);
   const [bombTimer, setBombTimer] = useState(60);
   const [showMismatch, setShowMismatch] = useState<boolean>(false);
+
+  // New game states
+  const [flashcardIndex, setFlashcardIndex] = useState(0);
+  const [flashcardScore, setFlashcardScore] = useState(0);
+  const [flashcardTimer, setFlashcardTimer] = useState(10);
+  const [showFlashcardAnswer, setShowFlashcardAnswer] = useState(false);
+  
+  const [memoryCards, setMemoryCards] = useState<any[]>([]);
+  const [flippedCards, setFlippedCards] = useState<number[]>([]);
+  const [matchedCards, setMatchedCards] = useState<number[]>([]);
+  const [memoryMoves, setMemoryMoves] = useState(0);
+  
+  const [gravityTerms, setGravityTerms] = useState<any[]>([]);
+  const [gravityScore, setGravityScore] = useState(0);
+  const [gravitySpeed, setGravitySpeed] = useState(1);
+  
+  const [bossHp, setBossHp] = useState(1000);
+  const [bossMaxHp, setBossMaxHp] = useState(1000);
+  const [bossQuestionStreak, setBossQuestionStreak] = useState(0);
+  
+  const [storyNodes, setStoryNodes] = useState<any[]>([]);
+  const [currentStoryNode, setCurrentStoryNode] = useState<any>(null);
 
   const teamIds = user.teams[user.currentTeamIndex] || [];
   const teamCards = teamIds.map(id => user.cardInstances[id]).filter(Boolean);
@@ -164,6 +185,179 @@ const StudyView: React.FC<StudyViewProps> = ({ user, setUser, onUpdateCoins, onU
       }
       setSelectedMatchingId(null);
     }
+  };
+
+  const startFlashcard = async (set: StudySet) => {
+    setLoading(true);
+    setSelectedSet(set);
+    setActiveGame('flashcard');
+    const pairs = await generateMatchingGame(set.material);
+    setMatchingPairs(pairs);
+    setFlashcardIndex(0);
+    setFlashcardScore(0);
+    setFlashcardTimer(10);
+    setShowFlashcardAnswer(false);
+    setLoading(false);
+  };
+
+  const handleFlashcardAnswer = (correct: boolean) => {
+    if (correct) {
+      const timeBonus = Math.max(0, flashcardTimer - 5);
+      const points = 100 + (timeBonus * 10);
+      setFlashcardScore(prev => prev + points);
+      onUpdateCoins(50 + timeBonus * 5);
+    }
+    
+    if (flashcardIndex + 1 >= matchingPairs.length) {
+      const bonusGems = Math.floor(flashcardScore / 100);
+      onUpdateGems(bonusGems);
+      updateStudyPoints(15);
+      setVictoryData({ coins: flashcardScore, gems: bonusGems, points: 15, title: "FLASHCARD MASTERY" });
+      setActiveGame('none');
+    } else {
+      setFlashcardIndex(prev => prev + 1);
+      setFlashcardTimer(10);
+      setShowFlashcardAnswer(false);
+    }
+  };
+
+  const startMemoryMatch = async (set: StudySet) => {
+    setLoading(true);
+    setSelectedSet(set);
+    setActiveGame('memory');
+    const pairs = await generateMatchingGame(set.material);
+    const cards = [...pairs, ...pairs].map((item, idx) => ({ ...item, id: idx, matched: false }));
+    setMemoryCards(cards.sort(() => Math.random() - 0.5));
+    setFlippedCards([]);
+    setMatchedCards([]);
+    setMemoryMoves(0);
+    setLoading(false);
+  };
+
+  const handleMemoryCardClick = (index: number) => {
+    if (flippedCards.length === 2 || flippedCards.includes(index) || matchedCards.includes(index)) return;
+    
+    const newFlipped = [...flippedCards, index];
+    setFlippedCards(newFlipped);
+    
+    if (newFlipped.length === 2) {
+      setMemoryMoves(prev => prev + 1);
+      const [first, second] = newFlipped;
+      const firstCard = memoryCards[first];
+      const secondCard = memoryCards[second];
+      
+      if (firstCard.term === secondCard.term || firstCard.definition === secondCard.definition) {
+        setMatchedCards(prev => [...prev, first, second]);
+        onUpdateCoins(100);
+        setFlippedCards([]);
+        
+        if (matchedCards.length + 2 >= memoryCards.length) {
+          const efficiency = Math.max(0, 100 - memoryMoves);
+          const bonusGems = 20 + efficiency;
+          onUpdateGems(bonusGems);
+          updateStudyPoints(12);
+          setVictoryData({ coins: efficiency * 10, gems: bonusGems, points: 12, title: "MEMORY MASTER" });
+          setActiveGame('none');
+        }
+      } else {
+        setTimeout(() => setFlippedCards([]), 1000);
+      }
+    }
+  };
+
+  const startGravityPress = async (set: StudySet) => {
+    setLoading(true);
+    setSelectedSet(set);
+    setActiveGame('gravity');
+    const pairs = await generateMatchingGame(set.material);
+    setMatchingPairs(pairs);
+    setGravityTerms([]);
+    setGravityScore(0);
+    setGravitySpeed(1);
+    setLoading(false);
+    
+    // Start spawning terms
+    const spawnInterval = setInterval(() => {
+      if (Math.random() < 0.3) {
+        const randomPair = pairs[Math.floor(Math.random() * pairs.length)];
+        setGravityTerms(prev => [...prev, {
+          ...randomPair,
+          id: Date.now(),
+          y: 0,
+          speed: gravitySpeed
+        }]);
+      }
+    }, 2000);
+    
+    setTimeout(() => clearInterval(spawnInterval), 60000); // 1 minute game
+  };
+
+  const startBossBattle = async (set: StudySet) => {
+    setLoading(true);
+    setSelectedSet(set);
+    setActiveGame('boss');
+    const qs = await generateStudyQuestions(set.material);
+    setQuestions(qs);
+    setBossHp(1000);
+    setBossMaxHp(1000);
+    setBossQuestionStreak(0);
+    setCurrentDungeonQuestionIdx(0);
+    setLoading(false);
+  };
+
+  const startStoryMode = async (set: StudySet) => {
+    setLoading(true);
+    setSelectedSet(set);
+    setActiveGame('story');
+    
+    // Generate story using AI
+    const storyPrompt = `Create an interactive mystery story based on this study material: ${set.material}. 
+    The story should have 5-7 nodes with choices that lead to different paths. 
+    Include the study concepts naturally in the narrative.
+    Return as JSON with nodes having id, text, choices array with text and nextId, and isEnd boolean.`;
+    
+    try {
+      const response = await fetch('/api/generate-story', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ prompt: storyPrompt })
+      });
+      const nodes = await response.json();
+      setStoryNodes(nodes);
+      setCurrentStoryNode(nodes[0]);
+    } catch (err) {
+      // Fallback story
+      const fallbackStory = [
+        {
+          id: 'start',
+          text: `You are investigating a mysterious case related to ${set.name}. What do you do first?`,
+          choices: [
+            { text: 'Examine the evidence', nextId: 'evidence' },
+            { text: 'Interview witnesses', nextId: 'witnesses' }
+          ]
+        },
+        {
+          id: 'evidence',
+          text: 'The evidence reveals important clues about the study material...',
+          choices: [{ text: 'Continue investigation', nextId: 'end' }]
+        },
+        {
+          id: 'witnesses',
+          text: 'The witnesses provide valuable insights...',
+          choices: [{ text: 'Solve the case', nextId: 'end' }]
+        },
+        {
+          id: 'end',
+          text: 'Case solved! You have mastered the material.',
+          choices: [],
+          isEnd: true
+        }
+      ];
+      setStoryNodes(fallbackStory);
+      setCurrentStoryNode(fallbackStory[0]);
+    }
+    
+    setLoading(false);
   };
 
   const startDungeon = async (set: StudySet) => {
@@ -407,6 +601,11 @@ const StudyView: React.FC<StudyViewProps> = ({ user, setUser, onUpdateCoins, onU
                   <div className="grid grid-cols-2 gap-2">
                     <button onClick={() => startDungeon(set)} className="py-3 bg-indigo-600 text-white text-[10px] font-bold rounded-xl hover:bg-indigo-700 transition-all shadow-md">DUNGEON</button>
                     <button onClick={() => startMatching(set)} className="py-3 bg-amber-500 text-white text-[10px] font-bold rounded-xl hover:bg-amber-600 transition-all shadow-md">BOMB DEFUSAL</button>
+                    <button onClick={() => startFlashcard(set)} className="py-3 bg-blue-500 text-white text-[10px] font-bold rounded-xl hover:bg-blue-600 transition-all shadow-md">FLASHCARDS</button>
+                    <button onClick={() => startMemoryMatch(set)} className="py-3 bg-green-500 text-white text-[10px] font-bold rounded-xl hover:bg-green-600 transition-all shadow-md">MEMORY MATCH</button>
+                    <button onClick={() => startGravityPress(set)} className="py-3 bg-red-500 text-white text-[10px] font-bold rounded-xl hover:bg-red-600 transition-all shadow-md">GRAVITY PRESS</button>
+                    <button onClick={() => startBossBattle(set)} className="py-3 bg-purple-600 text-white text-[10px] font-bold rounded-xl hover:bg-purple-700 transition-all shadow-md">BOSS BATTLE</button>
+                    <button onClick={() => startStoryMode(set)} className="py-3 bg-pink-500 text-white text-[10px] font-bold rounded-xl hover:bg-pink-600 transition-all shadow-md">STORY MODE</button>
                   </div>
                 </div>
               ))}
@@ -445,6 +644,89 @@ const StudyView: React.FC<StudyViewProps> = ({ user, setUser, onUpdateCoins, onU
              </div>
            )}
            <div className="flex justify-center"><button onClick={() => setActiveGame('none')} className="px-12 py-4 bg-slate-900 text-white rounded-full font-bebas text-2xl tracking-widest hover:bg-black transition-all">ABORT MISSION</button></div>
+        </div>
+      ) : activeGame === 'flashcard' ? (
+        <div className="max-w-4xl mx-auto space-y-8 animate-fade-in">
+          <div className="bg-white p-8 rounded-[3rem] shadow-xl border border-blue-100 text-center">
+            <h2 className="text-4xl font-bebas text-blue-900 mb-4">FLASHCARD TRAINING</h2>
+            <div className="flex justify-between items-center mb-8">
+              <div className="text-center">
+                <p className="text-[10px] font-bold text-slate-400 uppercase">Score</p>
+                <p className="text-3xl font-bebas text-blue-600">{flashcardScore}</p>
+              </div>
+              <div className="text-center">
+                <p className="text-[10px] font-bold text-slate-400 uppercase">Timer</p>
+                <p className="text-3xl font-bebas text-red-600">{flashcardTimer}s</p>
+              </div>
+              <div className="text-center">
+                <p className="text-[10px] font-bold text-slate-400 uppercase">Progress</p>
+                <p className="text-3xl font-bebas text-green-600">{flashcardIndex + 1}/{matchingPairs.length}</p>
+              </div>
+            </div>
+            
+            {matchingPairs[flashcardIndex] && (
+              <div className="space-y-8">
+                <div className="p-8 bg-blue-50 rounded-3xl border border-blue-100">
+                  <h3 className="text-2xl font-bold text-blue-900 mb-4">{matchingPairs[flashcardIndex].term}</h3>
+                  {showFlashcardAnswer && (
+                    <p className="text-lg text-slate-700 animate-fade-in">{matchingPairs[flashcardIndex].definition}</p>
+                  )}
+                </div>
+                
+                <div className="flex gap-4 justify-center">
+                  {!showFlashcardAnswer ? (
+                    <button onClick={() => setShowFlashcardAnswer(true)} className="px-8 py-4 bg-blue-600 text-white rounded-2xl font-bold">REVEAL ANSWER</button>
+                  ) : (
+                    <>
+                      <button onClick={() => handleFlashcardAnswer(true)} className="px-8 py-4 bg-green-600 text-white rounded-2xl font-bold">CORRECT ✓</button>
+                      <button onClick={() => handleFlashcardAnswer(false)} className="px-8 py-4 bg-red-600 text-white rounded-2xl font-bold">INCORRECT ✗</button>
+                    </>
+                  )}
+                </div>
+              </div>
+            )}
+          </div>
+          <div className="flex justify-center">
+            <button onClick={() => setActiveGame('none')} className="px-12 py-4 bg-slate-900 text-white rounded-full font-bebas text-2xl">EXIT TRAINING</button>
+          </div>
+        </div>
+      ) : activeGame === 'memory' ? (
+        <div className="max-w-6xl mx-auto space-y-8 animate-fade-in">
+          <div className="bg-white p-8 rounded-[3rem] shadow-xl border border-green-100 text-center">
+            <h2 className="text-4xl font-bebas text-green-900 mb-4">MEMORY MATCH</h2>
+            <div className="flex justify-center gap-8 mb-8">
+              <div className="text-center">
+                <p className="text-[10px] font-bold text-slate-400 uppercase">Moves</p>
+                <p className="text-3xl font-bebas text-green-600">{memoryMoves}</p>
+              </div>
+              <div className="text-center">
+                <p className="text-[10px] font-bold text-slate-400 uppercase">Matched</p>
+                <p className="text-3xl font-bebas text-blue-600">{matchedCards.length / 2}/{memoryCards.length / 2}</p>
+              </div>
+            </div>
+            
+            <div className="grid grid-cols-4 md:grid-cols-6 gap-4">
+              {memoryCards.map((card, index) => (
+                <button
+                  key={index}
+                  onClick={() => handleMemoryCardClick(index)}
+                  className={`aspect-square p-4 rounded-2xl border-2 transition-all text-sm font-bold ${
+                    flippedCards.includes(index) || matchedCards.includes(index)
+                      ? 'bg-blue-100 border-blue-500 text-blue-900'
+                      : 'bg-slate-100 border-slate-200 hover:bg-slate-200'
+                  }`}
+                >
+                  {flippedCards.includes(index) || matchedCards.includes(index)
+                    ? (card.term || card.definition)
+                    : '?'
+                  }
+                </button>
+              ))}
+            </div>
+          </div>
+          <div className="flex justify-center">
+            <button onClick={() => setActiveGame('none')} className="px-12 py-4 bg-slate-900 text-white rounded-full font-bebas text-2xl">EXIT GAME</button>
+          </div>
         </div>
       ) : activeGame === 'dungeon' ? (
         <div className={`max-w-5xl mx-auto space-y-8 animate-fade-in relative`}>

@@ -221,6 +221,69 @@
       background: radial-gradient(circle, #7c3aed 0%, #000 100%);
       box-shadow: 0 0 50px #7c3aed;
     }
+
+    /* New Game Animations */
+    @keyframes level-up-flash {
+      0% { transform: scale(1); filter: brightness(1); }
+      50% { transform: scale(1.1); filter: brightness(1.5); }
+      100% { transform: scale(1); filter: brightness(1); }
+    }
+
+    @keyframes card-flip {
+      0% { transform: rotateY(0deg); }
+      50% { transform: rotateY(90deg); }
+      100% { transform: rotateY(0deg); }
+    }
+
+    @keyframes gravity-fall {
+      from { transform: translateY(-100px); }
+      to { transform: translateY(100vh); }
+    }
+
+    @keyframes boss-damage {
+      0% { filter: hue-rotate(0deg); }
+      50% { filter: hue-rotate(180deg); }
+      100% { filter: hue-rotate(0deg); }
+    }
+
+    @keyframes achievement-pop {
+      0% { transform: scale(0) rotate(-180deg); opacity: 0; }
+      50% { transform: scale(1.2) rotate(0deg); opacity: 1; }
+      100% { transform: scale(1) rotate(0deg); opacity: 1; }
+    }
+
+    .animate-level-up { animation: level-up-flash 0.5s ease-in-out; }
+    .animate-card-flip { animation: card-flip 0.6s ease-in-out; }
+    .animate-gravity-fall { animation: gravity-fall linear; }
+    .animate-boss-damage { animation: boss-damage 0.3s ease-in-out; }
+    .animate-achievement { animation: achievement-pop 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55); }
+
+    /* Pomodoro Pet Animations */
+    @keyframes pet-study {
+      0% { transform: translateY(0px) rotate(0deg); }
+      25% { transform: translateY(-5px) rotate(2deg); }
+      50% { transform: translateY(0px) rotate(0deg); }
+      75% { transform: translateY(-3px) rotate(-2deg); }
+      100% { transform: translateY(0px) rotate(0deg); }
+    }
+
+    @keyframes pet-sleep {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+
+    .animate-pet-study { animation: pet-study 2s ease-in-out infinite; }
+    .animate-pet-sleep { animation: pet-sleep 3s ease-in-out infinite; }
+
+    /* Element Triangle Glow */
+    @keyframes element-glow {
+      0% { box-shadow: 0 0 5px currentColor; }
+      50% { box-shadow: 0 0 20px currentColor; }
+      100% { box-shadow: 0 0 5px currentColor; }
+    }
+
+    .element-advantage { animation: element-glow 1s ease-in-out infinite; }
   </style>
 <script type="importmap">
 {
